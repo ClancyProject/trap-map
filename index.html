@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mitten crab trap map - CLANCY</title>
+<meta name="description" content="Map of mitten crab traps in the CLANCY project.">
+<link rel="stylesheet" href="lib/leaflet.css">
+<link rel="stylesheet" href="lib/MarkerCluster.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header id="top">
+  <div class="title-row">
+    <h1>Mitten crab trap map</h1>
+    <p class="about">CLANCY project &ndash; mitten crab traps</p>
+  </div>
+  <div class="controls" role="search">
+    <div class="field search-field">
+      <label for="q">Search</label>
+      <input id="q" type="search" placeholder="Trap ID, river/lake or town" autocomplete="off"
+             role="combobox" aria-expanded="false" aria-controls="results" aria-autocomplete="list">
+      <ul id="results" role="listbox" hidden></ul>
+    </div>
+    <div class="field">
+      <label for="f-country">Country</label>
+      <select id="f-country"><option value="">All countries</option></select>
+    </div>
+    <div class="field">
+      <label for="f-status">Status</label>
+      <select id="f-status"><option value="">All statuses</option></select>
+    </div>
+    <p id="count" class="count" role="status" aria-live="polite"></p>
+  </div>
+</header>
+
+<div id="map" role="application" aria-label="Map of mitten crab traps"></div>
+
+<footer id="foot">
+  <span id="updated">Data last updated: &hellip;</span>
+  <span class="credit">Map: Leaflet &middot; basemaps &copy; OpenStreetMap contributors / Esri</span>
+</footer>
+
+<noscript><p class="noscript">This map needs JavaScript.</p></noscript>
+
+<script src="lib/leaflet.js"></script>
+<script src="lib/leaflet.markercluster.js"></script>
+<script src="data/traps.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
