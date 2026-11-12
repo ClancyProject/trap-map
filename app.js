@@ -19,10 +19,21 @@
   function withUnit(v) { return /^\d+([.,]\d+)?$/.test(v) ? v + " m" : v; }
 
   /* ---------- marker symbols (SVG) ---------- */
-  function shapeSvg(category, status, size) {
+  // A trap whose Trap type text mentions "return" (e.g. "Fixed, return system") gets a star in its category colour.
+  function isReturn(p) { return /return/i.test(p && p.type || ""); }
+  function starPoints(h, ro, ri) {
+    var pts = [];
+    for (var i = 0; i < 10; i++) {
+      var r = i % 2 ? ri : ro, a = -Math.PI / 2 + i * Math.PI / 5;
+      pts.push((h + r * Math.cos(a)).toFixed(1) + "," + (h + r * Math.sin(a)).toFixed(1));
+    }
+    return pts.join(" ");
+  }
+  function shapeSvg(category, status, size, ret) {
     var c = CAT[category] || CAT.Unknown, s = size || SIZE, h = s / 2, p = 3;
     var path;
-    if (c.shape === "circle") path = '<circle cx="' + h + '" cy="' + h + '" r="' + (h - p) + '"';
+    if (ret) path = '<polygon points="' + starPoints(h, h - 0.5, (h - 0.5) * 0.47) + '"';
+    else if (c.shape === "circle") path = '<circle cx="' + h + '" cy="' + h + '" r="' + (h - p) + '"';
     else if (c.shape === "square") path = '<rect x="' + p + '" y="' + p + '" width="' + (s - 2 * p) + '" height="' + (s - 2 * p) + '"';
     else if (c.shape === "triangle") path = '<polygon points="' + h + ',' + (p - 1) + ' ' + (s - p + 1) + ',' + (s - p) + ' ' + (p - 1) + ',' + (s - p) + '"';
     else path = '<polygon points="' + h + ',' + (p - 1) + ' ' + (s - p + 1) + ',' + h + ' ' + h + ',' + (s - p + 1) + ' ' + (p - 1) + ',' + h + '"';
@@ -34,7 +45,7 @@
   }
   function trapIcon(p) {
     return L.divIcon({
-      className: "trap-icon", html: shapeSvg(p.category, p.status), iconSize: [SIZE, SIZE], iconAnchor: [SIZE / 2, SIZE / 2],
+      className: "trap-icon", html: shapeSvg(p.category, p.status, SIZE, isReturn(p)), iconSize: [SIZE, SIZE], iconAnchor: [SIZE / 2, SIZE / 2],
       popupAnchor: [0, -SIZE / 2]
     });
   }
@@ -120,6 +131,9 @@
       ["Fixed", "Mobile", "Condo"].forEach(function (c) {
         h += "<li>" + shapeSvg(c, "Installed", 18) + " " + CAT[c].label + "</li>";
       });
+      if (features.some(function (f) { return isReturn(f.properties); })) {
+        h += "<li>" + shapeSvg("Fixed", "Installed", 18, true) + " Return system</li>";
+      }
       h += "</ul><h4>Status</h4><ul>" +
         "<li>" + shapeSvg("Fixed", "Installed", 18) + " Installed</li>" +
         "<li>" + shapeSvg("Fixed", "Planned", 18) + " Planned</li></ul>" +
