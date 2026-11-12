@@ -175,7 +175,7 @@
   selCountry.addEventListener("change", function () { applyFilter(true); });
   selStatus.addEventListener("change", function () { applyFilter(true); });
 
-  /* ---------- search (Trap ID / river-lake / town) ---------- */
+  /* ---------- search (Trap ID / river-lake / town / trap type) ---------- */
   var q = el("q"), resEl = el("results"), hits = [], active = -1;
   function norm(s) { return String(s || "").toLowerCase(); }
   function search(text) {
@@ -188,11 +188,12 @@
       else if (norm(p.id).indexOf(t) === 0) score = 60;
       else if (norm(p.river).indexOf(t) >= 0) score = 40;
       else if (norm(p.town).indexOf(t) >= 0) score = 30;
+      else if (norm(p.type).indexOf(t) >= 0) score = 20;
       else if (norm(p.state).indexOf(t) >= 0) score = 10;
       if (score) out.push({ p: p, score: score });
     });
     out.sort(function (a, b) { return b.score - a.score || (parseInt(a.p.id, 10) || 0) - (parseInt(b.p.id, 10) || 0); });
-    return out.slice(0, 12).map(function (o) { return o.p; });
+    return out.slice(0, 40).map(function (o) { return o.p; });
   }
   function showResults() {
     hits = search(q.value); active = -1;
@@ -204,7 +205,7 @@
       hits.forEach(function (p, i) {
         var li = document.createElement("li");
         li.setAttribute("role", "option"); li.id = "res-" + i; li.setAttribute("aria-selected", "false");
-        li.innerHTML = "<strong>Trap " + esc(p.id) + "</strong> <small>" + esc([p.river, p.town, p.country].filter(Boolean).join(", ")) + "</small>";
+        li.innerHTML = "<strong>Trap " + esc(p.id) + "</strong> <small>" + esc([p.river, p.town, p.country, p.type].filter(Boolean).join(", ")) + "</small>";
         li.addEventListener("mousedown", function (ev) { ev.preventDefault(); choose(p); });
         resEl.appendChild(li);
       });
