@@ -92,7 +92,7 @@
     var m = L.marker(ll, { icon: trapIcon(p), title: "Trap " + p.id, alt: "Trap " + p.id, keyboard: true, riseOnHover: true });
     m.feature = f;
     m.bindTooltip("Trap " + esc(p.id) + (p.river ? " &ndash; " + esc(p.river) : ""), { direction: "top", offset: [0, -10] });
-    m.bindPopup(function () { return popupHtml(p); }, { maxWidth: Math.min(340, window.innerWidth - 60), autoPanPadding: [20, 70] });
+    m.bindPopup(function () { return popupHtml(p); }, { maxWidth: Math.min(560, window.innerWidth - 60), autoPanPadding: [20, 70] });
     m.on("popupopen", function () { m.closeTooltip(); });
     markers[p.id] = m;
   });
