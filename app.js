@@ -132,7 +132,7 @@
         h += "<li>" + shapeSvg(c, "Installed", 18) + " " + CAT[c].label + "</li>";
       });
       if (features.some(function (f) { return isReturn(f.properties); })) {
-        h += "<li>" + shapeSvg("Fixed", "Installed", 18, true) + " Return system</li>";
+        h += "<li>" + shapeSvg("Unknown", "Installed", 18, true) + " Return system</li>";
       }
       h += "</ul><h4>Status</h4><ul>" +
         "<li>" + shapeSvg("Fixed", "Installed", 18) + " Installed</li>" +
