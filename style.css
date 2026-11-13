@@ -76,7 +76,8 @@ table.attr { border-collapse: collapse; width: 100%; }
 table.attr th { text-align: left; font-weight: 600; color: var(--muted); padding: 2px 8px 2px 0; vertical-align: top; white-space: nowrap; }
 table.attr td { padding: 2px 0; }
 .badge { display: inline-block; padding: 0 7px; border-radius: 9px; font-size: .8rem; font-weight: 600; border: 1px solid; }
-.badge.Installed { color: #0a5a2a; background: #e3f4ea; border-color: #0a5a2a; }
+.badge.In-operation { color: #0a5a2a; background: #e3f4ea; border-color: #0a5a2a; }
+.badge.Out-of-service { color: #444; background: #e6e6e6; border-color: #666; }
 .badge.Planned { color: #6a4a00; background: #fff2cc; border-color: #6a4a00; }
 .photos img { max-width: 160px; height: auto; }
 .popup-scroll { max-height: 50vh; overflow-y: auto; padding-right: 2px; }

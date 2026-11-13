@@ -39,6 +39,7 @@
     else path = '<polygon points="' + h + ',' + (p - 1) + ' ' + (s - p + 1) + ',' + h + ' ' + h + ',' + (s - p + 1) + ' ' + (p - 1) + ',' + h + '"';
     var style;
     if (status === "Planned") style = 'fill="#fff" stroke="' + c.color + '" stroke-width="3"';
+    else if (status === "Out of service") style = 'fill="#d4d4d4" stroke="' + c.color + '" stroke-width="2" stroke-dasharray="3 2"';
     else style = 'fill="' + c.color + '" stroke="#1a1a1a" stroke-width="1.5"';
     return '<svg xmlns="http://www.w3.org/2000/svg" width="' + s + '" height="' + s + '" viewBox="0 0 ' + s + ' ' + s +
       '" aria-hidden="true" focusable="false">' + path + ' ' + style + '/></svg>';
@@ -61,7 +62,7 @@
       row("Country", p.country) + row("State", p.state) + row("Town", p.town) + row("River/Lake", p.river) +
       row("River width", w) + row("Trap type", p.type) + row("Trap length", l) +
       row("Date installed", p.installed) +
-      "<tr><th scope=\"row\">Status</th><td><span class=\"badge " + esc(p.status) + "\">" + esc(p.status) + "</span></td></tr>" +
+      "<tr><th scope=\"row\">Status</th><td><span class=\"badge " + esc(String(p.status).replace(/\s+/g, "-")) + "\">" + esc(p.status) + "</span></td></tr>" +
       "</table>";
     h += "<h3>Catch</h3><div class=\"catch\">" + (p.catch || "<i>No catch recorded</i>") + "</div>";   // trusted HTML from build script
     if (p.photos) h += "<h3>Photos</h3><div class=\"photos\">" + p.photos + "</div>";                  // trusted HTML from build script
@@ -129,13 +130,14 @@
       legendEl = d;
       var h = "<summary>Legend</summary><h4>Trap category</h4><ul>";
       ["Fixed", "Mobile", "Condo"].forEach(function (c) {
-        h += "<li>" + shapeSvg(c, "Installed", 18) + " " + CAT[c].label + "</li>";
+        h += "<li>" + shapeSvg(c, "In operation", 18) + " " + CAT[c].label + "</li>";
       });
       if (features.some(function (f) { return isReturn(f.properties); })) {
-        h += "<li>" + shapeSvg("Unknown", "Installed", 18, true) + " Return system</li>";
+        h += "<li>" + shapeSvg("Unknown", "In operation", 18, true) + " Return system</li>";
       }
       h += "</ul><h4>Status</h4><ul>" +
-        "<li>" + shapeSvg("Fixed", "Installed", 18) + " Installed</li>" +
+        "<li>" + shapeSvg("Fixed", "In operation", 18) + " In operation</li>" +
+        "<li>" + shapeSvg("Fixed", "Out of service", 18) + " Out of service</li>" +
         "<li>" + shapeSvg("Fixed", "Planned", 18) + " Planned</li></ul>" +
         "<p>Numbered circles group nearby traps. Click one to zoom in; traps at the exact same position fan out when you click the group at the highest zoom.</p>";
       d.innerHTML = h;
@@ -156,7 +158,7 @@
     return Object.keys(seen).sort();
   }
   fillSelect(selCountry, uniq("country"));
-  fillSelect(selStatus, ["Installed", "Planned"].filter(function (s) { return uniq("status").indexOf(s) >= 0; }));
+  fillSelect(selStatus, ["In operation", "Out of service", "Planned"].filter(function (s) { return uniq("status").indexOf(s) >= 0; }));
 
   function passes(p) {
     return (!selCountry.value || p.country === selCountry.value) && (!selStatus.value || p.status === selStatus.value);
